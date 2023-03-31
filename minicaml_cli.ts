@@ -40,7 +40,7 @@ function main() {
       case "-v":
       case "--version":
         console.log(
-          `MiniCaml_typescript ${colorize("V.0.0.18", Color.FgBlue)}`
+          `MiniCaml_typescript ${colorize("V.0.0.19", Color.FgBlue)}`
         );
         return;
       case "--tokens":

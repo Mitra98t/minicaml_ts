@@ -35,7 +35,7 @@ function main() {
                 return;
             case "-v":
             case "--version":
-                console.log(`MiniCaml_typescript ${(0, utility_1.colorize)("V.0.0.14", utility_1.Color.FgBlue)}`);
+                console.log(`MiniCaml_typescript ${(0, utility_1.colorize)("V.0.0.19", utility_1.Color.FgBlue)}`);
                 return;
             case "--tokens":
                 options.tokens = true;
