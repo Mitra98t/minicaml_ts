@@ -1,0 +1,8 @@
+letrec fact = fun n -> {
+  if (n == 0) {
+    1
+  } else {
+    n * apply(fact (n-1))
+  }
+} in
+apply(fact 5)

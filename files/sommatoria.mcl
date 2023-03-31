@@ -1,0 +1,7 @@
+let sommatoria = fun x -> {
+  letrec sommatoria_aux = fun x -> {
+    if (x == 0) { 0 }
+    else { x + apply(sommatoria_aux (x-1)) }
+  }
+  in apply(sommatoria_aux x)
+} in apply(sommatoria 10)

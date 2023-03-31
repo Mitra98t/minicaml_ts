@@ -1,0 +1,14 @@
+{
+  "name": "minicaml_ts",
+  "version": "0.0.13",
+  "description": "MiniCaml interpreter written in TypeScript",
+  "main": "out/minicaml_cli.js",
+  "bin": "out/minicaml_cli.js",
+  "license": "MIT",
+  "dependencies": {
+    "json-colorizer": "^2.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11"
+  }
+}
