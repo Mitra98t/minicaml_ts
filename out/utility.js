@@ -1,28 +1,28 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.expToPrint = void 0;
+exports.colorize = exports.Color = exports.expToPrint = void 0;
 const expToPrint = (exp, index) => {
     let tree = index != 0 ? "\n" : "";
     let spaces = "";
     for (let i = 0; i < index; i++) {
         spaces += "|  ";
     }
-    spaces = colorize(spaces, [Color.FgGray, Color.Dim]);
+    spaces = (0, exports.colorize)(spaces, [Color.FgGray, Color.Dim]);
     tree += spaces;
     switch (exp.name) {
         case "EBool":
         case "EString":
         case "EInt":
-            tree += `${colorize(exp.name, [
+            tree += `${(0, exports.colorize)(exp.name, [
                 Color.FgYellow,
                 Color.Underscore,
-            ])} ${colorize(exp.value + "", Color.FgCyan)}`;
+            ])} ${(0, exports.colorize)(exp.value + "", Color.FgCyan)}`;
             break;
         case "Den":
-            tree += `${colorize(exp.name, [
+            tree += `${(0, exports.colorize)(exp.name, [
                 Color.FgYellow,
                 Color.Underscore,
-            ])} ${colorize(exp.value, Color.FgCyan)}`;
+            ])} ${(0, exports.colorize)(exp.value, Color.FgCyan)}`;
             break;
         case "Plus":
         case "Sub":
@@ -36,54 +36,54 @@ const expToPrint = (exp, index) => {
         case "GreaterOrEq":
         case "And":
         case "Or":
-            tree += `${colorize(exp.name, [Color.FgYellow, Color.Underscore])} (`;
+            tree += `${(0, exports.colorize)(exp.name, [Color.FgYellow, Color.Underscore])} (`;
             tree += (0, exports.expToPrint)(exp.value.v1, index + 1);
             tree += (0, exports.expToPrint)(exp.value.v2, index + 1);
             tree += `\n${spaces})`;
             break;
         case "Not":
         case "IsZero":
-            tree += `${colorize(exp.name, [Color.FgYellow, Color.Underscore])} (`;
+            tree += `${(0, exports.colorize)(exp.name, [Color.FgYellow, Color.Underscore])} (`;
             tree += (0, exports.expToPrint)(exp.value, index + 1);
             tree += `\n${spaces})`;
             break;
         case "Let":
-            tree += `${colorize(exp.name, [
+            tree += `${(0, exports.colorize)(exp.name, [
                 Color.FgYellow,
                 Color.Underscore,
-            ])} ${colorize(exp.value.ide, Color.FgCyan)} (`;
+            ])} ide: ${(0, exports.colorize)(exp.value.ide, Color.FgCyan)} (`;
             tree += (0, exports.expToPrint)(exp.value.v1, index + 1);
-            tree += `\n${spaces}${colorize("|  ", [Color.FgGray, Color.Dim])}in`;
+            tree += `\n${spaces}${(0, exports.colorize)("|  ", [Color.FgGray, Color.Dim])}in`;
             tree += (0, exports.expToPrint)(exp.value.program, index + 1);
             tree += `\n${spaces})`;
             break;
         case "IfThenElse":
-            tree += `${colorize(exp.name, [Color.FgYellow, Color.Underscore])} (`;
+            tree += `${(0, exports.colorize)(exp.name, [Color.FgYellow, Color.Underscore])} (`;
             tree += (0, exports.expToPrint)(exp.value.condition, index + 1);
             tree += (0, exports.expToPrint)(exp.value.then, index + 1);
             tree += (0, exports.expToPrint)(exp.value.else, index + 1);
             tree += `\n${spaces})`;
             break;
         case "Fun":
-            tree += `${colorize(exp.name, [
+            tree += `${(0, exports.colorize)(exp.name, [
                 Color.FgYellow,
                 Color.Underscore,
-            ])} ${colorize(exp.value.arg, Color.FgCyan)} (`;
+            ])} arg: ${(0, exports.colorize)(exp.value.arg, Color.FgCyan)} (`;
             tree += (0, exports.expToPrint)(exp.value.body, index + 1);
             tree += `\n${spaces})`;
             break;
         case "LetRec":
-            tree += `${colorize(exp.name, [
+            tree += `${(0, exports.colorize)(exp.name, [
                 Color.FgYellow,
                 Color.Underscore,
-            ])} ${colorize(exp.value.funcName, Color.FgCyan)} ${colorize(exp.value.arg, Color.FgCyan)} (`;
+            ])} ide: ${(0, exports.colorize)(exp.value.funcName, Color.FgCyan)} arg: ${(0, exports.colorize)(exp.value.arg, Color.FgCyan)} (`;
             tree += (0, exports.expToPrint)(exp.value.body, index + 1);
-            tree += `\n${spaces}${colorize("|  ", [Color.FgGray, Color.Dim])}in`;
+            tree += `\n${spaces}${(0, exports.colorize)("|  ", [Color.FgGray, Color.Dim])}in`;
             tree += (0, exports.expToPrint)(exp.value.program, index + 1);
             tree += `\n${spaces})`;
             break;
         case "Apply":
-            tree += `${colorize(exp.name, [Color.FgYellow, Color.Underscore])} (`;
+            tree += `${(0, exports.colorize)(exp.name, [Color.FgYellow, Color.Underscore])} (`;
             tree += (0, exports.expToPrint)(exp.value.func, index + 1);
             tree += (0, exports.expToPrint)(exp.value.actArg, index + 1);
             tree += `\n${spaces})`;
@@ -122,10 +122,11 @@ var Color;
     Color["BgCyan"] = "\u001B[46m";
     Color["BgWhite"] = "\u001B[47m";
     Color["BgGray"] = "\u001B[100m";
-})(Color || (Color = {}));
+})(Color = exports.Color || (exports.Color = {}));
 const colorize = (str, color) => {
     if (Array.isArray(color)) {
         return `${color.join("")}${str}${Color.Reset}`;
     }
     return `${color}${str}${Color.Reset}`;
 };
+exports.colorize = colorize;

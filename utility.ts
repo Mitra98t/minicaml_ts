@@ -51,7 +51,7 @@ export const expToPrint = (exp: exp, index: number): string => {
       tree += `${colorize(exp.name, [
         Color.FgYellow,
         Color.Underscore,
-      ])} ${colorize(exp.value.ide, Color.FgCyan)} (`;
+      ])} ide: ${colorize(exp.value.ide, Color.FgCyan)} (`;
       tree += expToPrint(exp.value.v1, index + 1);
       tree += `\n${spaces}${colorize("|  ", [Color.FgGray, Color.Dim])}in`;
       tree += expToPrint(exp.value.program, index + 1);
@@ -69,7 +69,7 @@ export const expToPrint = (exp: exp, index: number): string => {
       tree += `${colorize(exp.name, [
         Color.FgYellow,
         Color.Underscore,
-      ])} ${colorize(exp.value.arg, Color.FgCyan)} (`;
+      ])} arg: ${colorize(exp.value.arg, Color.FgCyan)} (`;
       tree += expToPrint(exp.value.body, index + 1);
       tree += `\n${spaces})`;
       break;
@@ -77,7 +77,7 @@ export const expToPrint = (exp: exp, index: number): string => {
       tree += `${colorize(exp.name, [
         Color.FgYellow,
         Color.Underscore,
-      ])} ${colorize(exp.value.funcName, Color.FgCyan)} ${colorize(
+      ])} ide: ${colorize(exp.value.funcName, Color.FgCyan)} arg: ${colorize(
         exp.value.arg,
         Color.FgCyan
       )} (`;
@@ -99,7 +99,7 @@ export const expToPrint = (exp: exp, index: number): string => {
   return tree;
 };
 
-enum Color {
+export enum Color {
   Reset = "\x1b[0m",
   Bright = "\x1b[1m",
   Dim = "\x1b[2m",
@@ -129,7 +129,7 @@ enum Color {
   BgGray = "\x1b[100m",
 }
 
-const colorize = (str: string, color: Color | Color[]): string => {
+export const colorize = (str: string, color: Color | Color[]): string => {
   if (Array.isArray(color)) {
     return `${color.join("")}${str}${Color.Reset}`;
   }

@@ -6,7 +6,7 @@ import { emptyEnv, Eval } from "./interpreter";
 
 import { Lexer } from "./lexer";
 import { Parser } from "./Parser";
-import { expToPrint } from "./utility";
+import { Color, colorize, expToPrint } from "./utility";
 
 const args = process.argv.slice(2);
 
@@ -16,22 +16,30 @@ let options = {
   ast: false,
 };
 
+function helpPrint() {
+  console.log(
+    `\n${colorize("Usage:", [
+      Color.FgYellow,
+    ])} minicaml_ts file.mcl [options]\n`
+  );
+  console.log(`${colorize("Options:", [Color.FgYellow])}`);
+  console.log("  -h, --help\t\tShow this help message");
+  console.log("  -v, --version\t\tShow version");
+  console.log("  --tokens\t\tPrint tokens from lexer");
+  console.log("  --ast\t\t\tPrint AST from parser\n");
+}
+
 function main() {
   for (let i = 0; i < args.length; i++) {
     const arg = args[i];
     switch (arg) {
       case "-h":
       case "--help":
-        console.log("Usage: minicaml_cli file.mcl [options]");
-        console.log("Options:");
-        console.log("  -h, --help\t\tShow this help message");
-        console.log("  -v, --version\t\tShow version");
-        console.log("  --tokens\t\tPrint tokens from lexer");
-        console.log("  --ast\t\t\tPrint AST from parser");
+        helpPrint();
         return;
       case "-v":
       case "--version":
-        console.log(`MiniCaml_typescript 0.0.13`);
+        console.log(`MiniCaml_typescript ${colorize("V.0.0.14", Color.FgBlue)}`);
         return;
       case "--tokens":
         options.tokens = true;
@@ -42,6 +50,7 @@ function main() {
       default:
         if (arg.startsWith("-")) {
           console.log(`Unknown option ${arg}`);
+          helpPrint();
           return;
         } else {
           options.file = arg;

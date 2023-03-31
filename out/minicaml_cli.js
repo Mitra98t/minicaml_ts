@@ -16,22 +16,27 @@ let options = {
     tokens: false,
     ast: false,
 };
+function helpPrint() {
+    console.log(`\n${(0, utility_1.colorize)("Usage:", [
+        utility_1.Color.FgYellow,
+    ])} minicaml_ts file.mcl [options]\n`);
+    console.log(`${(0, utility_1.colorize)("Options:", [utility_1.Color.FgYellow])}`);
+    console.log("  -h, --help\t\tShow this help message");
+    console.log("  -v, --version\t\tShow version");
+    console.log("  --tokens\t\tPrint tokens from lexer");
+    console.log("  --ast\t\t\tPrint AST from parser\n");
+}
 function main() {
     for (let i = 0; i < args.length; i++) {
         const arg = args[i];
         switch (arg) {
             case "-h":
             case "--help":
-                console.log("Usage: minicaml_cli file.mcl [options]");
-                console.log("Options:");
-                console.log("  -h, --help\t\tShow this help message");
-                console.log("  -v, --version\t\tShow version");
-                console.log("  --tokens\t\tPrint tokens from lexer");
-                console.log("  --ast\t\t\tPrint AST from parser");
+                helpPrint();
                 return;
             case "-v":
             case "--version":
-                console.log(`MiniCaml_typescript 0.0.11`);
+                console.log(`MiniCaml_typescript ${(0, utility_1.colorize)("V.0.0.14", utility_1.Color.FgBlue)}`);
                 return;
             case "--tokens":
                 options.tokens = true;
@@ -42,6 +47,7 @@ function main() {
             default:
                 if (arg.startsWith("-")) {
                     console.log(`Unknown option ${arg}`);
+                    helpPrint();
                     return;
                 }
                 else {
