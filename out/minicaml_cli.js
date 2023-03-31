@@ -10,6 +10,7 @@ const interpreter_1 = require("./interpreter");
 const lexer_1 = require("./lexer");
 const Parser_1 = require("./Parser");
 const utility_1 = require("./utility");
+const Errors_1 = require("./Errors");
 const args = process.argv.slice(2);
 let options = {
     file: "",
@@ -17,9 +18,7 @@ let options = {
     ast: false,
 };
 function helpPrint() {
-    console.log(`\n${(0, utility_1.colorize)("Usage:", [
-        utility_1.Color.FgYellow,
-    ])} minicaml_ts file.mcl [options]\n`);
+    console.log(`\n${(0, utility_1.colorize)("Usage:", [utility_1.Color.FgYellow])} minicaml_ts file.mcl [options]\n`);
     console.log(`${(0, utility_1.colorize)("Options:", [utility_1.Color.FgYellow])}`);
     console.log("  -h, --help\t\tShow this help message");
     console.log("  -v, --version\t\tShow version");
@@ -71,8 +70,16 @@ function main() {
 }
 function executeCode(file, options) {
     const code = fs_1.default.readFileSync(file, "utf-8");
-    const lexer = new lexer_1.Lexer(code);
-    const tokens = lexer.tokens;
+    let lexer;
+    let tokens = [];
+    try {
+        lexer = new lexer_1.Lexer(code);
+        tokens = lexer.tokens;
+    }
+    catch (error) {
+        Errors_1.Errors.printError(error.message, Errors_1.ErrorType.Lexer);
+        return;
+    }
     console.log("");
     if (options.tokens) {
         console.log("Tokens ~~~\n");
@@ -90,15 +97,14 @@ function executeCode(file, options) {
         console.log("");
     }
     try {
+        console.log("Execution ~~~\n");
         const interpretato = (0, interpreter_1.Eval)(AST, (0, interpreter_1.emptyEnv)());
-        console.log("Result ~~~\n");
+        console.log("\nResult ~~~\n");
         console.log((0, json_colorizer_1.default)(JSON.stringify(interpretato), { pretty: true }));
         console.log("");
     }
     catch (error) {
-        console.log("");
-        console.log(error.message);
-        console.log("");
+        Errors_1.Errors.printError(error.message, Errors_1.ErrorType.Interpreter);
     }
 }
 main();

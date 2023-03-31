@@ -51,7 +51,8 @@ const matches = [
     { id: Types_1.Tokens.string, match: /^"(?:\\["\\]|[^\n"\\])*"/ },
     { id: Types_1.Tokens.string, match: /^'(?:\\['\\]|[^\n'\\])*'/ },
     // Number
-    { id: Types_1.Tokens.number, match: /^0|[1-9][0-9]*/ },
+    { id: Types_1.Tokens.number, match: /^\b\d+\b/ },
+    // { id: Tokens.number, match: /^0|[1-9][0-9]*/ },
 ];
 class Lexer {
     constructor(code) {
@@ -98,7 +99,7 @@ class Lexer {
         let error = false;
         while (code.length > 0 && !error) {
             let tok = Types_1.Tokens.invalid;
-            let string = "";
+            let stringa = "";
             let found = false;
             let matchLen = 0;
             for (let i = 0; i < matches.length; i++) {
@@ -108,9 +109,9 @@ class Lexer {
                     found = true;
                     tok = m.id;
                     if (tok == Types_1.Tokens.string)
-                        string = match[0].substring(1, match[0].length - 1);
+                        stringa = match[0].substring(1, match[0].length - 1);
                     else
-                        string = match[0];
+                        stringa = match[0];
                     code = code.substring(match[0].length);
                     pos += match[0].length;
                     matchLen += match[0].length;
@@ -121,8 +122,13 @@ class Lexer {
                 char = 0;
             }
             if (tok == Types_1.Tokens.invalid) {
-                string = "error at line " + line + " char " + (char + 1);
+                stringa =
+                    "Unknown token at line " +
+                        (line + 1) +
+                        " char " +
+                        (char + (line == 0 ? 1 : 0));
                 error = true;
+                throw new Error(stringa);
             }
             // Check for tokens to skyp
             if ([
@@ -132,9 +138,9 @@ class Lexer {
                 Types_1.Tokens.endOfFile,
             ].indexOf(tok) == -1)
                 this.tokens.push({
-                    word: string,
+                    word: stringa,
                     type: tok,
-                    line: line,
+                    line: line + 1,
                     col: char + (line == 0 ? 1 : 0),
                 });
             char += matchLen;
@@ -144,7 +150,7 @@ class Lexer {
             this.tokens.push({
                 word: "end of file",
                 type: Types_1.Tokens.endOfFile,
-                line: line,
+                line: line + 1,
                 col: char + (line == 0 ? 1 : 0),
             });
         return this.tokens;

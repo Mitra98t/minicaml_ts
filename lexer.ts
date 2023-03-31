@@ -57,7 +57,8 @@ const matches: TokRecognition[] = [
   { id: Tokens.string, match: /^"(?:\\["\\]|[^\n"\\])*"/ }, // String using "
   { id: Tokens.string, match: /^'(?:\\['\\]|[^\n'\\])*'/ }, // String using '
   // Number
-  { id: Tokens.number, match: /^0|[1-9][0-9]*/ },
+  { id: Tokens.number, match: /^\b\d+\b/ },
+  // { id: Tokens.number, match: /^0|[1-9][0-9]*/ },
 ];
 
 export class Lexer {
@@ -111,7 +112,7 @@ export class Lexer {
 
     while (code.length > 0 && !error) {
       let tok: Tokens = Tokens.invalid;
-      let string: string = "";
+      let stringa: string = "";
       let found: boolean = false;
       let matchLen: number = 0;
 
@@ -122,21 +123,27 @@ export class Lexer {
           found = true;
           tok = m.id;
           if (tok == Tokens.string)
-            string = match[0].substring(1, match[0].length - 1);
-          else string = match[0];
+            stringa = match[0].substring(1, match[0].length - 1);
+          else stringa = match[0];
           code = code.substring(match[0].length);
           pos += match[0].length;
           matchLen += match[0].length;
         }
       }
+
       if (tok == Tokens.newLine) {
         line++;
         char = 0;
       }
 
       if (tok == Tokens.invalid) {
-        string = "error at line " + line + " char " + (char + 1);
+        stringa =
+          "Unknown token at line " +
+          (line + 1) +
+          " char " +
+          (char + (line == 0 ? 1 : 0));
         error = true;
+        throw new Error(stringa);
       }
 
       // Check for tokens to skyp
@@ -149,9 +156,9 @@ export class Lexer {
         ].indexOf(tok) == -1
       )
         this.tokens.push({
-          word: string,
+          word: stringa,
           type: tok,
-          line: line,
+          line: line + 1,
           col: char + (line == 0 ? 1 : 0),
         });
       char += matchLen;
@@ -161,7 +168,7 @@ export class Lexer {
       this.tokens.push({
         word: "end of file",
         type: Tokens.endOfFile,
-        line: line,
+        line: line + 1,
         col: char + (line == 0 ? 1 : 0),
       });
 

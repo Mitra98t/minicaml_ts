@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Parser = void 0;
+const Errors_1 = require("./Errors");
 const Types_1 = require("./Types");
 class Parser {
     constructor(tokens, debugPrints = false) {
@@ -16,9 +17,7 @@ class Parser {
             parseProg = this.parseProgram();
         }
         catch (error) {
-            console.log("");
-            console.log(error.message);
-            console.log("");
+            Errors_1.Errors.printError(error.message, Errors_1.ErrorType.Parser);
         }
         return parseProg;
     }

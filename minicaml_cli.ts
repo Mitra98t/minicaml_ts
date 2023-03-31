@@ -7,6 +7,8 @@ import { emptyEnv, Eval } from "./interpreter";
 import { Lexer } from "./lexer";
 import { Parser } from "./Parser";
 import { Color, colorize, expToPrint } from "./utility";
+import { Tok } from "./Types";
+import { Errors, ErrorType } from "./Errors";
 
 const args = process.argv.slice(2);
 
@@ -18,9 +20,7 @@ let options = {
 
 function helpPrint() {
   console.log(
-    `\n${colorize("Usage:", [
-      Color.FgYellow,
-    ])} minicaml_ts file.mcl [options]\n`
+    `\n${colorize("Usage:", [Color.FgYellow])} minicaml_ts file.mcl [options]\n`
   );
   console.log(`${colorize("Options:", [Color.FgYellow])}`);
   console.log("  -h, --help\t\tShow this help message");
@@ -39,7 +39,9 @@ function main() {
         return;
       case "-v":
       case "--version":
-        console.log(`MiniCaml_typescript ${colorize("V.0.0.14", Color.FgBlue)}`);
+        console.log(
+          `MiniCaml_typescript ${colorize("V.0.0.15", Color.FgBlue)}`
+        );
         return;
       case "--tokens":
         options.tokens = true;
@@ -77,8 +79,15 @@ function main() {
 
 function executeCode(file: string, options: { tokens: boolean; ast: boolean }) {
   const code = fs.readFileSync(file, "utf-8");
-  const lexer = new Lexer(code);
-  const tokens = lexer.tokens;
+  let lexer: Lexer;
+  let tokens: Tok[] = [];
+  try {
+    lexer = new Lexer(code);
+    tokens = lexer.tokens;
+  } catch (error: any) {
+    Errors.printError(error.message, ErrorType.Lexer);
+    return;
+  }
   console.log("");
   if (options.tokens) {
     console.log("Tokens ~~~\n");
@@ -96,14 +105,13 @@ function executeCode(file: string, options: { tokens: boolean; ast: boolean }) {
     console.log("");
   }
   try {
+    console.log ("Execution ~~~\n");
     const interpretato = Eval(AST, emptyEnv());
-    console.log("Result ~~~\n");
+    console.log("\nResult ~~~\n");
     console.log(jsonColors(JSON.stringify(interpretato), { pretty: true }));
     console.log("");
   } catch (error: any) {
-    console.log("");
-    console.log(error.message);
-    console.log("");
+    Errors.printError(error.message, ErrorType.Interpreter);
   }
 }
 

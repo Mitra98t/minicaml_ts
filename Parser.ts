@@ -1,3 +1,4 @@
+import { Errors, ErrorType } from "./Errors";
 import { exp, ide } from "./interpreter";
 import { Lexer } from "./lexer";
 import { Tok, Tokens } from "./Types";
@@ -19,9 +20,7 @@ export class Parser {
     try {
       parseProg = this.parseProgram();
     } catch (error: any) {
-      console.log("");
-      console.log(error.message);
-      console.log("");
+      Errors.printError(error.message, ErrorType.Parser);
     }
     return parseProg;
   }
