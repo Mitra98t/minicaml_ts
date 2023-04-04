@@ -41,8 +41,8 @@ const matches = [
     { id: Types_1.Tokens.additiveOperator, match: /^[+\-]/ },
     { id: Types_1.Tokens.multiplicativeOperator, match: /^[*\/]/ },
     // Relational Operators
-    { id: Types_1.Tokens.relationalOperator, match: /^[><]/ },
     { id: Types_1.Tokens.relationalOperator, match: /^[><]=/ },
+    { id: Types_1.Tokens.relationalOperator, match: /^[><]/ },
     // Logical Operators
     { id: Types_1.Tokens.logicOR, match: /^\|\|/ },
     { id: Types_1.Tokens.logicAND, match: /^&&/ },

@@ -46,8 +46,8 @@ const matches: TokRecognition[] = [
   { id: Tokens.additiveOperator, match: /^[+\-]/ },
   { id: Tokens.multiplicativeOperator, match: /^[*\/]/ },
   // Relational Operators
-  { id: Tokens.relationalOperator, match: /^[><]/ },
   { id: Tokens.relationalOperator, match: /^[><]=/ },
+  { id: Tokens.relationalOperator, match: /^[><]/ },
   // Logical Operators
   { id: Tokens.logicOR, match: /^\|\|/ },
   { id: Tokens.logicAND, match: /^&&/ },
